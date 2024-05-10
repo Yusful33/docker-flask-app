@@ -12,8 +12,9 @@ Docker
 ### Installation
 1. Clone this repository to your local machine:
 
-
+```
 git clone <repository_url>
+```
 
 Install the required Python packages using pip:
 
@@ -22,7 +23,7 @@ pip install -r requirements.txt
 
 2. Set up your PostgreSQL database with the following schema:
 
-Copy code
+```
 CREATE TABLE IF NOT EXISTS weather_data (
     id SERIAL PRIMARY KEY,
     date DATE,
@@ -31,6 +32,7 @@ CREATE TABLE IF NOT EXISTS weather_data (
     temperature FLOAT,
     description TEXT
 );
+```
 
 ## Configuration
 Obtain an API key from OpenWeatherMap and store it securely. Set up a Docker secret or environment variable named api-key with your API key.
@@ -38,8 +40,9 @@ Set up a Docker secret or environment variable named POSTGRES_PASSWORD with your
 Usage
 To run the application:
 
-
+```
 python app.py
+```
 The application will be accessible at http://localhost:8000.
 
 ## Usage with Docker
@@ -47,11 +50,17 @@ Alternatively, you can run the application using Docker. Make sure you have Dock
 
 1. Build the Docker image:
 
+```
 docker build -t weather-app .
-Run the Docker container:
+```
+
+2. Run the Docker container:
 
 
-2. docker run -p 8000:8000 --name weather-container weather-app
+```
+docker run -p 8000:8000 --name weather-container weather-app
+```
+
 The application will be accessible at http://localhost:8000.
 
 ## Contributing
