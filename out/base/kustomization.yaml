@@ -1,0 +1,15 @@
+#! kustomization.yaml
+# Generated code, do not edit
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+    - 0-weather-web-app-namespace.yaml
+    - api-key-secret.yaml
+    - db-db-data-persistentVolumeClaim.yaml
+    - db-deployment.yaml
+    - db-expose.yaml
+    - db-password-secret.yaml
+    - default-network-policy.yaml
+    - server-deployment.yaml
+    - server-expose.yaml
+    - server-service.yaml

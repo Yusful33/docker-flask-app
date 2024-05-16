@@ -1,0 +1,59 @@
+#! server-deployment.yaml
+# Generated code, do not edit
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: server
+    namespace: weather-web-app
+    labels:
+        com.docker.compose.project: weather-web-app
+        com.docker.compose.service: server
+spec:
+    replicas: 1
+    selector:
+        matchLabels:
+            com.docker.compose.project: weather-web-app
+            com.docker.compose.service: server
+    strategy:
+        type: Recreate
+    template:
+        metadata:
+            labels:
+                com.docker.compose.project: weather-web-app
+                com.docker.compose.service: server
+                com.docker.compose.network.default: "true"
+        spec:
+            containers:
+                - name: server
+                  image: yusufcattaneo836/flask-app:0.1
+                  imagePullPolicy: IfNotPresent
+                  env:
+                    - name: API_KEY
+                      value: "/run/secrets/api-key"
+                    - name: POSTGRES_PASSWORD
+                      value: "/run/secrets/db-password"
+                  ports:
+                    - name: server-8000
+                      containerPort: 8000
+                  volumeMounts:
+                    - name: run-secrets-api-key
+                      mountPath: /run/secrets/api-key
+                      subPath: api-key
+                      readOnly: true
+                    - name: run-secrets-db-password
+                      mountPath: /run/secrets/db-password
+                      subPath: db-password
+                      readOnly: true
+            volumes:
+                - name: run-secrets-api-key
+                  secret:
+                    secretName: api-key
+                    items:
+                        - key: api-key
+                          path: api-key
+                - name: run-secrets-db-password
+                  secret:
+                    secretName: db-password
+                    items:
+                        - key: db-password
+                          path: db-password

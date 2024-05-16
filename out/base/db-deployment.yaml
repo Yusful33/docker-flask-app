@@ -1,0 +1,74 @@
+#! db-deployment.yaml
+# Generated code, do not edit
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: db
+    namespace: weather-web-app
+    labels:
+        com.docker.compose.project: weather-web-app
+        com.docker.compose.service: db
+spec:
+    replicas: 1
+    selector:
+        matchLabels:
+            com.docker.compose.project: weather-web-app
+            com.docker.compose.service: db
+    strategy:
+        type: Recreate
+    template:
+        metadata:
+            labels:
+                com.docker.compose.project: weather-web-app
+                com.docker.compose.service: db
+                com.docker.compose.network.default: "true"
+        spec:
+            restartPolicy: Always
+            initContainers:  # Add this section for the init container
+              - name: volume-permissions
+                image: busybox
+                command: ['sh', '-c', 'chown -R 999:999 /var/lib/postgresql/data']
+                volumeMounts:
+                  - name: var-lib-postgresql-data
+                    mountPath: /var/lib/postgresql/data
+            containers:
+                - name: db
+                  image: postgres:12.18
+                  imagePullPolicy: IfNotPresent
+                  env:
+                    - name: POSTGRES_PASSWORD
+                      value: "/run/secrets/db-password"
+                  securityContext:
+                    runAsUser: 999
+                    runAsGroup: 999
+                  livenessProbe:
+                    exec:
+                        command: [pg_isready]
+                    periodSeconds: 10
+                    timeoutSeconds: 5
+                    failureThreshold: 5
+                  ports:
+                    - name: db-5432
+                      containerPort: 5432
+                  volumeMounts:
+                    - name: var-lib-postgresql-data
+                      mountPath: /var/lib/postgresql/data
+                    - name: docker-entrypoint-initdb-d-init-sh
+                      mountPath: /docker-entrypoint-initdb.d/init.sh
+                    - name: run-secrets-db-password
+                      mountPath: /run/secrets/db-password
+                      subPath: db-password
+                      readOnly: true
+            volumes:
+                - name: run-secrets-db-password
+                  secret:
+                    secretName: db-password
+                    items:
+                        - key: db-password
+                          path: db-password
+                - name: var-lib-postgresql-data
+                  persistentVolumeClaim:
+                    claimName: db-db-data
+                - name: docker-entrypoint-initdb-d-init-sh
+                  hostPath:
+                    path: /Users/ycattaneo/Google Drive/My Drive/projects/weather-web-app/init.sh

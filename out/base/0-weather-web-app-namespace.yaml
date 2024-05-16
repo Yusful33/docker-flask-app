@@ -1,0 +1,8 @@
+#! 0-weather-web-app-namespace.yaml
+# Generated code, do not edit
+apiVersion: v1
+kind: Namespace
+metadata:
+    name: weather-web-app
+    labels:
+        com.docker.compose.project: weather-web-app

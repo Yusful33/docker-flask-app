@@ -13,16 +13,12 @@ services:
       context: .
     ports:
       - 8000:8000
-    develop:
-      watch:
-      - action: sync
-        path: .
-        target: .
+    image: yusufcattaneo836/flask-app:0.1
     secrets:
       - api-key
       - db-password
     environment:
-      - API_KEY=api-key
+      - API_KEY=/run/secrets/api-key
       - POSTGRES_PASSWORD=/run/secrets/db-password
     depends_on:
       db:
@@ -30,7 +26,8 @@ services:
   db:
     image: postgres:12.18
     restart: always
-    user: postgres
+    # user: postgres
+    user: '999'
     secrets:
       - db-password
     volumes:
