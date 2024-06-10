@@ -3,11 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Weather Application</title>
+    <title>Learning Application</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        .links {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        a {
+            display: block;
+            padding: 10px 20px;
+            color: white;
+            background-color: #007BFF;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+        a:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 <body>
     <h1>Welcome to your Flask Application!</h1>
-    <!-- Add a hyperlink to the /weather action -->
-    <a href="/weather">Get Weather</a>
+    <div class="links">
+        <!-- Add a hyperlink to the /weather action -->
+        <a href="/weather">Get Weather</a>
+        <a href="/credit_cards">Get Credit Card Info</a>
+    </div>
 </body>
 </html>

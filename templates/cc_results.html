@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Best Card Results</title>
+</head>
+<body>
+    <h1>Best Card to Maximize Your Rewards</h1>
+    <h2>{{ best_card.name }}</h2>
+    <p>Here are your potential rewards:</p>
+    <ul>
+        {% for category, reward in best_card.rewards.items() %}
+            <li>{{ category.title() }}: {{ reward }}%</li>
+        {% endfor %}
+    </ul>
+    <p>Your spending:</p>
+    <ul>
+        {% for category, spending in user_spending.items() %}
+            <li>{{ category.title() }}: ${{ '%.2f' % spending }}</li>
+        {% endfor %}
+    </ul>
+    <a href="/">Calculate again</a>
+</body>
+</html>
+

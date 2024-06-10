@@ -32,7 +32,8 @@ services:
       - db-password
     volumes:
       - db-data:/var/lib/postgresql/data
-      - ./init.sh:/docker-entrypoint-initdb.d/init.sh
+      - ./weather_init.sh:/docker-entrypoint-initdb.d/weather_init.sh
+      - ./cc_init.sh:/docker-entrypoint-initdb.d/cc_init.sh
     environment:
       - POSTGRES_PASSWORD=/run/secrets/db-password
     expose:

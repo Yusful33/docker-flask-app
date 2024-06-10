@@ -2,3 +2,4 @@ requests
 flask
 psycopg2
 datetime
+flask_cors

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Credit Card Rewards Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+            background-color: #f4f4f9;
+        }
+        form {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px #ccc;
+        }
+        label {
+            margin-top: 10px;
+        }
+        input[type="text"] {
+            margin: 5px 0 15px;
+            padding: 10px;
+            width: calc(100% - 22px); /* accounting for padding and borders */
+            box-sizing: border-box; /* include padding and border in the width */
+        }
+        button {
+            padding: 10px 15px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>Credit Card Rewards Calculator</h1>
+    <form action="/credit_cards" method="post">
+        <label for="restaurants">Restaurants Spending:</label>
+        <input type="number" min="0" step="0.01" id="restaurants" name="restaurants" required><br>
+        <label for="grocery">Grocery Spending:</label>
+        <input type="number" min="0" step="0.01" id="grocery" name="grocery" required><br>
+        <label for="flights">Flights Spending:</label>
+        <input type="number" min="0" step="0.01" id="flights" name="flights" required><br>
+        <label for="hotel">Hotel Spending:</label>
+        <input type="number" min="0" step="0.01" id="hotel" name="hotel" required><br>
+        <label for="streaming">Streaming Services Spending:</label>
+        <input type="number" min="0" step="0.01" id="streaming" name="streaming" required><br>
+        <label for="everything_else">Everything Else Spending:</label>
+        <input type="number" min="0" step="0.01" id="everything_else" name="everything_else" required><br>
+        <button type="submit">Calculate Best Card</button>
+    </form>
+</body>
+</html>
