@@ -48,18 +48,19 @@ The application will be accessible at http://localhost:8000.
 ## Usage with Docker
 Alternatively, you can run the application using Docker. Make sure you have Docker installed on your system.
 
-1. Build the Docker image:
+1. Grant Executable Permission on the Host 
 
 ```
-docker build -t weather-app .
+chmod +x ./cc_init.sh
+chmod +x ./weather_init.sh
 ```
 
-2. Run the Docker container:
-
+2. Leverage Docker Compose to deploy the application 
 
 ```
-docker run -p 8000:8000 --name weather-container weather-app
+docker compose up --build
 ```
+
 
 The application will be accessible at http://localhost:8000.
 

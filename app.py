@@ -80,6 +80,7 @@ def connect_to_db(db_name, db_user):
 def insert_weather_data(city, temperature, description):
     conn = connect_to_db('weather_info', 'weather_user')
     cursor = conn.cursor()
+    cursor.execute('''select * from information_schema.tables''')
     cursor.execute('''INSERT INTO weather_data (id, date, time, city, temperature, description)
                       VALUES (DEFAULT, CURRENT_DATE, CURRENT_TIME, %s, %s, %s)''', (city, temperature, description))
     conn.commit()
@@ -102,6 +103,7 @@ def weather():
                 'temperature': weather_data['current']['temp'],
                 'description': weather_data['current']['weather'][0]['description']
             }
+            app.logger.info(f'Current role being leveraged {weather}')
              # Insert data into database
             insert_weather_data(weather['city'], weather['temperature'], weather['description'])
             return render_template('weather.html', weather=weather)
