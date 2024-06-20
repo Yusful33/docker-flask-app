@@ -5,6 +5,13 @@ on:
     branches:
       - main
 
+env:
+# Hostname of your registry
+REGISTRY: docker.io
+# Image repository, without hostname and tag
+IMAGE_NAME: flask-app
+SHA: ${{ github.event.pull_request.head.sha || github.event.after }}
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -22,9 +29,31 @@ jobs:
             version: "lab:latest"
             driver: cloud
             endpoint: "dockersales/yusuf-basic-nlp"
-      - name: Build and push
-        uses: docker/build-push-action@v5
+        # Extract metadata (tags, labels) for Docker
+        - name: Extract Docker metadata
+        id: meta
+        uses: docker/metadata-action@v5
         with:
+        images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+        labels: |
+            org.opencontainers.image.revision=${{ env.SHA }}            
+        tags: |
+            type=edge,branch=$repo.default_branch
+            type=semver,pattern=v{{version}}
+            type=sha,prefix=,suffix=,format=short     
+
+    # Build and push Docker image with Buildx
+      # (don't push on PR, load instead)
+      - name: Build and push Docker image
+        id: build-and-push
+        uses: docker/build-push-action@v6
+        with:
+          sbom: ${{ github.event_name != 'pull_request' }}
+          provenance: ${{ github.event_name != 'pull_request' }}
+          push: ${{ github.event_name != 'pull_request' }}
+          load: ${{ github.event_name == 'pull_request' }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
           context: .
           platforms: linux/amd64,linux/arm64
           push: true
