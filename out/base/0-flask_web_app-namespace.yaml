@@ -1,0 +1,8 @@
+#! 0-flask_web_app-namespace.yaml
+# Generated code, do not edit
+apiVersion: v1
+kind: Namespace
+metadata:
+    name: flask_web_app
+    labels:
+        com.docker.compose.project: flask_web_app

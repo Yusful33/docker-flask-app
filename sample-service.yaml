@@ -1,0 +1,46 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-service
+  namespace: default
+  labels:
+    app: my-demoapp
+spec:
+  selector:
+    app: my-demoapp
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-deployment
+  namespace: default
+  labels:
+    app: my-demoapp
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: my-demoapp
+  template:
+    metadata:
+      labels:
+        app: my-demoapp
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: kubernetes.io/arch
+                operator: In
+                values:
+                - amd64
+                - arm64
+      containers:
+      - name: nginx
+        image: public.ecr.aws/z9d2n7e1/nginx:1.19.5
+        ports:
+        - containerPort: 80

@@ -4,28 +4,28 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
     name: server
-    namespace: weather-web-app
+    namespace: flask_web_app
     labels:
-        com.docker.compose.project: weather-web-app
+        com.docker.compose.project: flask_web_app
         com.docker.compose.service: server
 spec:
     replicas: 1
     selector:
         matchLabels:
-            com.docker.compose.project: weather-web-app
+            com.docker.compose.project: flask_web_app
             com.docker.compose.service: server
     strategy:
         type: Recreate
     template:
         metadata:
             labels:
-                com.docker.compose.project: weather-web-app
+                com.docker.compose.project: flask_web_app
                 com.docker.compose.service: server
                 com.docker.compose.network.default: "true"
         spec:
             containers:
                 - name: server
-                  image: yusufcattaneo836/flask-app:0.1
+                  image: yusufcattaneo836/flask-app:multiarch
                   imagePullPolicy: IfNotPresent
                   env:
                     - name: API_KEY

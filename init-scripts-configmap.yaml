@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: init-scripts
+data:
+  weather_init.sh: |
+    #!/bin/sh
+    # Your weather_init.sh script content here
+  cc_init.sh: |
+    #!/bin/sh
+    # Your cc_init.sh script content here

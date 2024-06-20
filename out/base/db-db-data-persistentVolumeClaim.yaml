@@ -4,15 +4,14 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
     name: db-db-data
-    namespace: weather-web-app
+    namespace: flask_web_app
     labels:
         com.docker.compose.service: db
         com.docker.compose.volume: db-data
 spec:
     accessModes:
         # TODO would need to check which services use this volume
-        # - ReadWriteOnce
-        - ReadWriteMany
+        - ReadWriteOnce
     volumeMode: Filesystem
     resources:
         requests:

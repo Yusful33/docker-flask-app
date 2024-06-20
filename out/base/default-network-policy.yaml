@@ -4,7 +4,7 @@ apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
     name: default-network-policy
-    namespace: weather-web-app
+    namespace: flask_web_app
 spec:
     podSelector:
         matchLabels:

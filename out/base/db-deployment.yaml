@@ -4,33 +4,26 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
     name: db
-    namespace: weather-web-app
+    namespace: flask_web_app
     labels:
-        com.docker.compose.project: weather-web-app
+        com.docker.compose.project: flask_web_app
         com.docker.compose.service: db
 spec:
     replicas: 1
     selector:
         matchLabels:
-            com.docker.compose.project: weather-web-app
+            com.docker.compose.project: flask_web_app
             com.docker.compose.service: db
     strategy:
         type: Recreate
     template:
         metadata:
             labels:
-                com.docker.compose.project: weather-web-app
+                com.docker.compose.project: flask_web_app
                 com.docker.compose.service: db
                 com.docker.compose.network.default: "true"
         spec:
             restartPolicy: Always
-            initContainers:  # Add this section for the init container
-              - name: volume-permissions
-                image: busybox
-                command: ['sh', '-c', 'chown -R 999:999 /var/lib/postgresql/data']
-                volumeMounts:
-                  - name: var-lib-postgresql-data
-                    mountPath: /var/lib/postgresql/data
             containers:
                 - name: db
                   image: postgres:12.18
@@ -40,7 +33,6 @@ spec:
                       value: "/run/secrets/db-password"
                   securityContext:
                     runAsUser: 999
-                    runAsGroup: 999
                   livenessProbe:
                     exec:
                         command: [pg_isready]
@@ -53,8 +45,10 @@ spec:
                   volumeMounts:
                     - name: var-lib-postgresql-data
                       mountPath: /var/lib/postgresql/data
-                    - name: docker-entrypoint-initdb-d-init-sh
-                      mountPath: /docker-entrypoint-initdb.d/init.sh
+                    - name: docker-entrypoint-initdb-d-weather-init-sh
+                      mountPath: /docker-entrypoint-initdb.d/weather_init.sh
+                    - name: docker-entrypoint-initdb-d-cc-init-sh
+                      mountPath: /docker-entrypoint-initdb.d/cc_init.sh
                     - name: run-secrets-db-password
                       mountPath: /run/secrets/db-password
                       subPath: db-password
@@ -69,6 +63,9 @@ spec:
                 - name: var-lib-postgresql-data
                   persistentVolumeClaim:
                     claimName: db-db-data
-                - name: docker-entrypoint-initdb-d-init-sh
+                - name: docker-entrypoint-initdb-d-weather-init-sh
                   hostPath:
-                    path: /Users/ycattaneo/Google Drive/My Drive/projects/weather-web-app/init.sh
+                    path: /Users/ycattaneo/Google Drive/My Drive/projects/flask_web_app/weather_init.sh
+                - name: docker-entrypoint-initdb-d-cc-init-sh
+                  hostPath:
+                    path: /Users/ycattaneo/Google Drive/My Drive/projects/flask_web_app/cc_init.sh

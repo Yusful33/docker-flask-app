@@ -1,0 +1,71 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flask-app-deployment
+  namespace: default
+  labels:
+    app: flask-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: flask-app
+  template:
+    metadata:
+      labels:
+        app: flask-app
+    spec:
+      nodeSelector:
+        node-type: ec2
+      containers:
+      - name: flask-app
+        image: yusufcattaneo836/flask-app:multiarch
+        ports:
+        - containerPort: 8000
+        env:
+        - name: API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: api-key
+              key: api-key
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: db-password
+              key: db-password
+      - name: postgres
+        image: postgres:12.18
+        ports:
+        - containerPort: 5432
+        env:
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: db-password
+              key: db-password
+        volumeMounts:
+        - mountPath: /var/lib/postgresql/data
+          name: efs-data
+        - mountPath: /docker-entrypoint-initdb.d/weather_init.sh
+          subPath: weather_init.sh
+          name: init-scripts
+        - mountPath: /docker-entrypoint-initdb.d/cc_init.sh
+          subPath: cc_init.sh
+          name: init-scripts
+        readinessProbe:
+          exec:
+            command: ["pg_isready", "-U", "postgres"]
+          initialDelaySeconds: 10
+          periodSeconds: 10
+        livenessProbe:
+          exec:
+            command: ["pg_isready", "-U", "postgres"]
+          initialDelaySeconds: 30
+          periodSeconds: 10
+      volumes:
+      - name: efs-data
+        persistentVolumeClaim:
+          claimName: efs-pvc
+      - name: init-scripts
+        configMap:
+          name: init-scripts

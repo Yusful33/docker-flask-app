@@ -9,8 +9,9 @@
 # https://github.com/docker/awesome-compose
 services:
   server:
-    build:
-      context: .
+    # build:
+    #   context: .
+    image: yusufcattaneo836/flask-app:multiarch
     ports:
       - 8000:8000
     secrets:
