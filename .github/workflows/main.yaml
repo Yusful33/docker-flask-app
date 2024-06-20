@@ -44,9 +44,14 @@ jobs:
             type=semver,pattern=v{{version}}
             type=sha,prefix=,suffix=,format=short
 
+      - name: Log Docker metadata
+        run: |
+            echo "Tags: ${{ steps.meta.outputs.tags }}"
+            echo "Labels: ${{ steps.meta.outputs.labels }}"
+
       - name: Build and push Docker image
         id: build-and-push
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v5
         with:
           sbom: ${{ github.event_name != 'pull_request' }}
           provenance: ${{ github.event_name != 'pull_request' }}
